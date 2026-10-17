@@ -1,0 +1,52 @@
+{
+  "name": "AK Dreams Book",
+  "short_name": "AK Dreams",
+  "description": "Apprendre, comprendre et approfondir : 113 cartes éducatives en français, wolof et arabe — AK Dreams Book.",
+  "id": "akdreams-book",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0B1F3F",
+  "theme_color": "#0B1F3F",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["education"],
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Toutes les cartes",
+      "short_name": "Cartes",
+      "url": "./index.html#/cartes"
+    },
+    {
+      "name": "Apprentissage",
+      "short_name": "Apprendre",
+      "url": "./index.html#/apprendre"
+    },
+    {
+      "name": "Espace apprenant",
+      "short_name": "Mon espace",
+      "url": "./index.html#/espace"
+    }
+  ]
+}

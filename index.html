@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr" id="root">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AK Dreams Book — J'apprends ma religion</title>
+<meta name="description" content="Apprendre, comprendre et approfondir : 113 cartes éducatives en français, wolof et arabe — AK Dreams Book.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B1F3F">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AK Dreams">
+<link rel="icon" type="image/png" href="assets/icons/favicon.png">
+<link rel="stylesheet" href="styles.css?v=23">
+</head>
+<body>
+<header class="top">
+  <div class="bar">
+    <a class="brand" href="#/">
+      <span class="logo">AK</span>
+      <span class="brand-txt"><strong>AK Dreams Book</strong><em>J'apprends ma religion</em></span>
+    </a>
+    <nav class="nav" id="mainNav" aria-label="Navigation">
+      <a href="#/" data-r="home"><span data-i="nav_home">Accueil</span></a>
+      <a href="#/cartes" data-r="cartes"><span data-i="nav_cards">Toutes les cartes</span></a>
+      <a href="#/categories" data-r="cats"><span data-i="nav_cats">Catégories</span></a>
+      <a href="#/apprendre" data-r="learn"><span data-i="nav_learn">Apprentissage</span></a>
+      <a href="#/espace" data-r="espace"><span data-i="nav_espace">Espace apprenant</span></a>
+      <a href="#/quiz" data-r="quiz"><span data-i="nav_quiz">Quiz</span></a>
+      <a href="#/apropos" data-r="about"><span data-i="nav_about">À propos</span></a>
+    </nav>
+    <div class="bar-tools">
+      <div class="langbar" role="group" aria-label="Langue / Language">
+        <button data-lang="fr" class="on">FR</button>
+        <button data-lang="wo">WO</button>
+        <button data-lang="ar">ع</button>
+      </div>
+      <button id="themeBtn" class="themebtn" type="button" aria-label="Mode nuit">☾</button>
+      <span id="installWrap" style="display:none"><button id="installBtn" class="installbtn" type="button" data-i="install_btn">Installer l’application</button></span>
+      <button id="menuBtn" class="menubtn" type="button" aria-label="Menu"><i></i></button>
+    </div>
+  </div>
+</header>
+<main id="view"></main>
+<footer>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <span class="logo lg">AK</span>
+      <div><strong>AK Dreams Book</strong><p data-i="foot">113 cartes en français, wolof et arabe.</p></div>
+    </div>
+    <div><strong data-i="ft_nav">Naviguer</strong>
+      <a href="#/" data-i="nav_home">Accueil</a>
+      <a href="#/cartes" data-i="nav_cards">Toutes les cartes</a>
+      <a href="#/apprendre" data-i="nav_learn">Apprentissage</a>
+      <a href="#/espace" data-i="nav_espace">Espace apprenant</a>
+      <a href="#/quiz" data-i="nav_quiz">Quiz</a>
+      <a href="#/apropos" data-i="nav_about">À propos</a>
+    </div>
+    <div><strong data-i="ft_act">Partager et gérer</strong>
+      <button class="linkbtn" type="button" data-share data-i="ft_share">Copier le lien du site</button>
+      <a href="admin.html">Admin</a>
+      <small>AK Dreams Book — Ahlam • 77 137 10 10</small>
+    </div>
+  </div>
+</footer>
+<script src="data.js?v=23"></script>
+<script src="app.js?v=23"></script>
+<script>
+/* مزدوجة الأمان: إن فشل تحميل app.js (مثلاً عبر file:// أو كاش قديم) تظهر رسالة تشخيص بدل صفحة فارغة */
+setTimeout(function(){
+  var v=document.getElementById("view");
+  if(v&&String(v.innerHTML).replace(/\s|<br>/g,"")===""){
+    v.innerHTML='<section class="panel" style="margin-top:24px"><h2 class="sec">Content not loaded — المحتوى لم يُحمّل</h2>'+
+    '<p style="color:#5A6B84;font-size:15px">Open the site via the local server: <b>http://localhost:8123</b> and hard-refresh (Cmd+Shift+R).<br>'+
+    'افتح الموقع عبر الخادم المحلي أعلاه ثم جدّد الصفحة بالكامل (⌘⇧R). إذا استمرت المشكلة فملف app.js لم يُقرأ من مجلد المشروع مباشرة.</p></section>';
+  }
+},400);
+</script>
+<script>
+if("serviceWorker" in navigator){
+ window.addEventListener("load",function(){
+  navigator.serviceWorker.register("service-worker.js").catch(function(){});
+ });
+}
+</script>
+</body>
+</html>

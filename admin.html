@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin — AK Dreams Book</title><link rel="stylesheet" href="styles.css"></head><body>
+<header class="top"><div class="brand"><div class="logo">AK</div><div><strong>Admin — AK Dreams Book</strong><span>Ajouter / modifier / supprimer • sauvegardé dans le navigateur (localStorage)</span></div></div>
+<nav class="nav"><a href="index.html">← Retour au site</a></nav></header>
+<main>
+<section class="panel" id="gate"><h2>🔐 Accès</h2><p>Mot de passe par défaut : <code>akdreams2026</code> (changeable ci-dessous). Sécurité honnête : sur un site statique, ceci protège contre les modifications accidentelles, pas contre un attaquant. Pour une vraie sécurité multi-utilisateurs, il faudra un backend.</p>
+<input type="password" id="pw" placeholder="Mot de passe"><button class="btn" id="go">Entrer</button></section>
+<section class="panel" id="main" style="display:none">
+<div class="toolbar"><input id="s" placeholder="Rechercher…"><select id="fc"></select><button class="btn" id="new">+ Nouvelle carte</button>
+<button class="btn alt" id="exp">⬇ Export JSON</button><button class="btn ghost" id="imp">⬆ Import JSON</button><button class="btn ghost" id="reset">Réinitialiser (PDF)</button></div>
+<input type="file" id="file" accept=".json" style="display:none">
+<div class="toolbar"><input id="npw" placeholder="Nouveau mot de passe"><button class="btn ghost" id="chpw">Changer</button></div>
+<div id="list"></div>
+<h3>Importer un nouveau PDF ?</h3>
+<p>Fonctionnalité <b>non fiable automatiquement</b> : l'extraction FR/WO en 2 colonnes mélange l'ordre. Procédure recommandée : extrayez le texte (script <code>tools/extract.py</code> à venir), relisez, puis importez via <b>Import JSON</b> au format <code>{id,cat,p,qfr,afr,qwo,awo,qar,aar,r}</code>. Les collections futures : ajoutez une clé <code>collection</code> par carte.</p>
+</section></main>
+<script src="data.js"></script>
+<script>
+const LS="akdreams_cards_v1",PW="akdreams_pw_v1";
+const MEM={};
+function sget(k,d){try{var v=localStorage.getItem(k);return v===null?d:v;}catch(e){return(k in MEM)?MEM[k]:d;}}
+function sset(k,v){try{localStorage.setItem(k,v);}catch(e){MEM[k]=v;}}
+function sdel(k){try{localStorage.removeItem(k);}catch(e){delete MEM[k];}}
+let all=[];try{all=[...CARDS,...JSON.parse(sget(LS)||"[]").filter(x=>!x._del)]}catch(e){all=[...CARDS]}
+let byId={};all.forEach(c=>byId[c.id]=c);
+const $=id=>document.getElementById(id);
+$("fc").innerHTML=`<option value="">Toutes</option>`+CATEGORIES.map(c=>`<option value="${c.id}">${c.fr}</option>`).join("");
+$("go").onclick=()=>{if(($("pw").value||"")===(sget(PW)||"akdreams2026")){$("gate").style.display="none";$("main").style.display="block";draw();}else alert("Mot de passe incorrect");};
+function save(){sset(LS,JSON.stringify(all.filter(c=>!CARDS.find(b=>b.id===c.id&&JSON.stringify(b)===JSON.stringify(c)))));}
+function draw(){const q=($("s").value||"").toLowerCase(),f=$("fc").value;
+ $("list").innerHTML=all.filter(c=>(!f||c.cat===f)&&(!q||(c.qfr+c.afr+c.qwo).toLowerCase().includes(q))).map(c=>
+ `<div class="card" style="cursor:default"><b>#${c.id} [${c.cat} p.${c.p}] ${c.r?"⚠ à vérifier":""}</b>
+ <label>Q FR</label><textarea data-f="qfr" data-id="${c.id}" rows="2" style="width:100%">${c.qfr||""}</textarea>
+ <label>R FR</label><textarea data-f="afr" data-id="${c.id}" rows="3" style="width:100%">${c.afr||""}</textarea>
+ <label>Q WO</label><textarea data-f="qwo" data-id="${c.id}" rows="2" style="width:100%">${c.qwo||""}</textarea>
+ <label>R WO</label><textarea data-f="awo" data-id="${c.id}" rows="3" style="width:100%">${c.awo||""}</textarea>
+ <label>Q AR (manuel)</label><textarea data-f="qar" data-id="${c.id}" rows="2" style="width:100%" dir="rtl">${c.qar||""}</textarea>
+ <label>R AR (manuel)</label><textarea data-f="aar" data-id="${c.id}" rows="3" style="width:100%" dir="rtl">${c.aar||""}</textarea>
+ <div class="row"><label><input type="checkbox" data-f="r" data-id="${c.id}" ${c.r?"checked":""}> à vérifier</label>
+ <select data-f="cat" data-id="${c.id}">${CATEGORIES.map(k=>`<option ${k.id===c.cat?"selected":""}>${k.id}</option>`).join("")}</select>
+ <button data-del="${c.id}">🗑 Supprimer</button></div></div>`).join("");
+ document.querySelectorAll("textarea,input[type=checkbox],select[data-f=cat]").forEach(el=>el.onchange=()=>{const c=byId[+el.dataset.id];const f=el.dataset.f;
+  c[f]=el.type==="checkbox"?(el.checked?1:0):el.value;save();});
+ document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{if(!confirm("Supprimer #"+b.dataset.del+" ?"))return;
+  const id=+b.dataset.del;all=all.filter(c=>c.id!==id);const cur=JSON.parse(sget(LS)||"[]");cur.push({id,_del:true});sset(LS,JSON.stringify(cur));byId={};all.forEach(c=>byId[c.id]=c);draw();});}
+$("s").oninput=draw;$("fc").onchange=draw;
+$("new").onclick=()=>{const id=Math.max(...all.map(c=>c.id))+1;const c={id,cat:"fondements",p:0,qfr:"",afr:"",qwo:"",awo:"",qar:"",aar:"",r:1};all.push(c);byId[id]=c;save();draw();};
+$("exp").onclick=()=>{const b=new Blob([JSON.stringify(all,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="akdreams_cartes.json";a.click();};
+$("imp").onclick=()=>$("file").click();
+$("file").onchange=e=>{const f=e.target.files[0];const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(!Array.isArray(j))throw 0;all=j;byId={};all.forEach(c=>byId[c.id]=c);save();draw();}catch{alert("JSON invalide")}};r.readAsText(f);};
+$("reset").onclick=()=>{if(confirm("Effacer toutes les modifications et revenir au PDF ?")){sdel(LS);location.reload();}};
+$("chpw").onclick=()=>{if($("npw").value.length<4)return alert("4 caractères min");sset(PW,$("npw").value);alert("Mot de passe changé");};
+</script></body></html>
